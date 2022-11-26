@@ -1,16 +1,15 @@
 package com.alea.pokeapi.aleapokedex.dto;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-@Getter
-@Setter
-@NoArgsConstructor
-public class PokemonDTO {
+import java.io.Serializable;
 
 
+@Data
+public class PokemonDTO implements Serializable {
 
         private Long id;
 
@@ -19,8 +18,6 @@ public class PokemonDTO {
         private int height;
 
         private int weight;
-
-        private int order;
 
         private int baseExperience;
 

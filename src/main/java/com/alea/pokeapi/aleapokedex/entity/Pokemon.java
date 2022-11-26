@@ -2,16 +2,21 @@ package com.alea.pokeapi.aleapokedex.entity;
 
 import java.util.List;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Data
+@Table(name = "pokemon")
+@Entity
 public class Pokemon {
 
+    @Id
     private Long id;
 
     private String name;
@@ -19,8 +24,6 @@ public class Pokemon {
     private int height;
 
     private int weight;
-
-    private int order;
 
     private int baseExperience;
 
