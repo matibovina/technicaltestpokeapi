@@ -1,18 +1,17 @@
 package com.alea.pokeapi.aleapokedex.controllers;
 
 import com.alea.pokeapi.aleapokedex.entity.Pokemon;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class PokedexController {
@@ -25,17 +24,19 @@ public class PokedexController {
     }
 
     @GetMapping(value = "/test/")
-    public Pokemon[] getAll() {
+    public List<String> getAll() {
 
-        ResponseEntity<Pokemon[]> response =
-                restTemplate.getForEntity("https://pokeapi.co/api/v2/pokemon/?offset=0&limit=5000",
-                        Pokemon[].class);
+        ResponseEntity<List<Pokemon>> response =
+                restTemplate.exchange("https://pokeapi.co/api/v2/pokemon/?offset=0&limit=5000",
+                        HttpMethod.GET, null,
+                        new ParameterizedTypeReference<List<Pokemon>>() {}
+                        );
         //String url = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=5000";
-        Pokemon[] pokemones = response.getBody();
+        List<Pokemon> pokemones = response.getBody();
        // List<Pokemon> pokemones = new ArrayList<>();
         //Object forObjects = Collections.restTemplate.getForObject(url, Object.class);
 
-        return pokemones;
+        return pokemones.stream().map(Pokemon::getName).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/test/pokemon/{id}")
