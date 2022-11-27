@@ -11,5 +11,6 @@ import java.util.List;
 public interface PokemonMapper {
 
     List<PokemonDTO> asPokemonDTOList(List<Pokemon> pokemonList);
+    List<Pokemon> asPokemonList(List<PokemonDTO> pokemonList);
 
 }
