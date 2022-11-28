@@ -1,25 +1,22 @@
 package com.alea.pokeapi.aleapokedex.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.Column;
 import java.io.Serializable;
 
 
 @Data
 public class PokemonDTO implements Serializable {
 
-        private Long id;
+    private Long id;
 
-        private String name;
+    private String name;
 
-        private int height;
+    private Integer height;
 
-        private int weight;
+    private Integer weight;
 
-        private int baseExperience;
+    @JsonProperty("base_experience")
+    private Integer baseExperience;
 
-    }
+}

@@ -15,18 +15,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class PokemonServiceTest {
@@ -114,7 +109,7 @@ class PokemonServiceTest {
         Pokemon pokemon = new Pokemon();
         pokemon.setHeight(123);
         pokemon.setWeight(12);
-        pokemon.setBase_experience(234);
+        pokemon.setBaseExperience(234);
         pokemon.setName("Leo");
         pokemon.setId(1L);
 
@@ -124,9 +119,9 @@ class PokemonServiceTest {
 
         //Mockear las llamadas externas (llamadas a repositorio, llamadas a servicios externos, mappers)
         Mockito.when(pokemonRepository.findByWeigth(Mockito.any())).thenReturn(Arrays.asList(pokemon));
-Mockito.when(pokemonMapper.asPokemonDTOList(any())).thenReturn(Arrays.asList(getPokemonDTO()));
+        Mockito.when(pokemonMapper.asPokemonDTOList(any())).thenReturn(Arrays.asList(getPokemonDTO()));
         //llamada al servicio que se esta probando(Service.retireveHeaviest)
-List<PokemonDTO> response = pokemonService.retrieveHeaviest(1);
+        List<PokemonDTO> response = pokemonService.findHeaviest(5);
         //Asserts
         assertNotNull(response);
         Assertions.assertEquals(123, response.get(0).getHeight());

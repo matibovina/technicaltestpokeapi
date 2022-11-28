@@ -1,19 +1,14 @@
 package com.alea.pokeapi.aleapokedex.entity;
 
-import java.util.List;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.annotations.Table;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Data
-@Table(name = "pokemon")
 @Entity
 public class Pokemon {
 
@@ -22,11 +17,10 @@ public class Pokemon {
 
     private String name;
 
-    private int height;
+    private Integer height;
 
-    private int weight;
+    private Integer weight;
 
-    @Column(name = "base_experience")
-    private int base_experience;
+    private Integer baseExperience;
 
 }

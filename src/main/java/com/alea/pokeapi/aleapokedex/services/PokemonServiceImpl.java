@@ -2,7 +2,6 @@ package com.alea.pokeapi.aleapokedex.services;
 
 import com.alea.pokeapi.aleapokedex.dto.PokemonDTO;
 import com.alea.pokeapi.aleapokedex.dto.PokemonRestResponseDTO;
-import com.alea.pokeapi.aleapokedex.entity.Pokemon;
 import com.alea.pokeapi.aleapokedex.mapper.PokemonMapper;
 import com.alea.pokeapi.aleapokedex.repository.PokemonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,6 @@ import java.util.stream.Collectors;
 @Service
 public class PokemonServiceImpl implements PokemonService{
 
-  //  private Logger log = LoggerFactory.getLogger(PokemonServiceImpl.class);
-
     @Autowired
     private RestTemplate restTemplate;
 
@@ -30,36 +27,40 @@ public class PokemonServiceImpl implements PokemonService{
     private String url = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=5000";
 
     @Override
-    public List<PokemonDTO> retrieveAll() {
-        PokemonRestResponseDTO response  = restTemplate.getForEntity(url, PokemonRestResponseDTO.class).getBody();
-
-
+    public List<PokemonDTO> findAll() {
 
         List<PokemonDTO> pokemonListDTO = new ArrayList<>();
-        pokemonListDTO = response.getResults().parallelStream().map(pokemonResultRestResponseDTO -> restTemplate.getForEntity(
-                pokemonResultRestResponseDTO.getUrl(), PokemonDTO.class).getBody()).collect(Collectors.toList());
 
-        pokemonRepository.saveAll(pokemonMapper.asPokemonList(pokemonListDTO));
+        try {
+            PokemonRestResponseDTO response  = restTemplate.getForEntity(url, PokemonRestResponseDTO.class).getBody();
+            pokemonListDTO = response.getResults().parallelStream().map(pokemonResultRestResponseDTO -> restTemplate.getForEntity(
+                    pokemonResultRestResponseDTO.getUrl(), PokemonDTO.class).getBody()).collect(Collectors.toList());
+
+            pokemonRepository.saveAll(pokemonMapper.asPokemonList(pokemonListDTO));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return pokemonListDTO;
     }
 
-
-
     @Override
-    public List<PokemonDTO> retrieveHeaviest(Integer numResults) {
-        //1- llamar a repositorio para recuperar lista de pokemones (find all order by height)
-        //2- recorrer la lista de vuelta con stream filter u order
+    public List<PokemonDTO> findHeaviest(Integer numResults) {
         return pokemonMapper.asPokemonDTOList(pokemonRepository.findByWeigth(PageRequest.of(0, numResults)));
     }
 
     @Override
-    public List<PokemonDTO> retrieveHighest(int numResults) {
+    public List<PokemonDTO> findHighest(Integer numResults) {
         return pokemonMapper.asPokemonDTOList(pokemonRepository.findByHeight(PageRequest.of(0, numResults)));
     }
 
     @Override
-    public List<PokemonDTO> retrieveExperienced(int numResults) {
+    public List<PokemonDTO> findExperienced(Integer numResults) {
         return pokemonMapper.asPokemonDTOList(pokemonRepository.findByBaseExperience(PageRequest.of(0, numResults)));
+    }
+
+    @Override
+    public long countRows() {
+        return  pokemonRepository.count();
     }
 }
