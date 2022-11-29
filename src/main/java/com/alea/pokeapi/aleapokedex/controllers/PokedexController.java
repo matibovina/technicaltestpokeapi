@@ -35,7 +35,7 @@ public class PokedexController {
             response.put("Message", e.getMessage().concat(": ".concat(e.getLocalizedMessage())));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
-        response.put("Success: ", "All the pokemons are saved in the Pokedex");
+        response.put("Success: ", "All the pokemons were saved in the Pokedex");
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
     }
 
