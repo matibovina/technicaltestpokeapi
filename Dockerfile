@@ -2,7 +2,7 @@ FROM openjdk:11
 
 WORKDIR /app
 
-COPY ./target/alea-pokedex-0.0.1-SNAPSHOT.jar /app
+COPY ./target/alea-pokedex-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 8001
 

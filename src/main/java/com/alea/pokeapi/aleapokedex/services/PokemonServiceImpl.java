@@ -25,7 +25,6 @@ public class PokemonServiceImpl implements PokemonService {
     private PokemonRepository pokemonRepository;
 
 
-
     @Override
     public List<PokemonDTO> saveAll() {
 

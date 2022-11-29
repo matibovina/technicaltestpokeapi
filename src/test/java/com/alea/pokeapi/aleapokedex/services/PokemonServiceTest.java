@@ -160,7 +160,11 @@ class PokemonServiceTest {
         List<PokemonDTO> response = pokemonService.findAll();
         //Asserts
         assertNotNull(response);
-      //  Assertions.assertEquals(, response.get(0));
+        Assertions.assertEquals(pokemon.getWeight(), response.get(0).getWeight());
+        Assertions.assertEquals(pokemon.getName(), response.get(0).getName());
+        Assertions.assertEquals(pokemon.getHeight(), response.get(0).getHeight());
+        Assertions.assertEquals(pokemon.getBaseExperience(), response.get(0).getBaseExperience());
+
     }
 
     @Test
