@@ -24,21 +24,6 @@ public class PokedexController {
         this.pokemonMapper = pokemonMapper;
     }
 
-    @GetMapping(value = "/update-data-base")
-    public ResponseEntity<?> updateDataBase() {
-        Map<String, Object> response = new HashMap<>();
-
-        try {
-            List<PokemonDTO> pokemonDTOList = pokemonService.saveAll();
-
-        } catch (Exception e) {
-            response.put("Message", e.getMessage().concat(": ".concat(e.getLocalizedMessage())));
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
-        }
-        response.put("Success: ", "All the pokemons were saved in the Pokedex");
-        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
-    }
-
     @GetMapping(value = "/top-heaviest")
     public ResponseEntity<?> showHeaviestsPokemons(@RequestParam(required = false) Integer numMaxResults) {
 
@@ -128,7 +113,7 @@ public class PokedexController {
             response.put("Message", e.getMessage().concat(": ".concat(e.getLocalizedMessage())));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
-        response.put("message", "List of all Pokemons");
+        response.put("message", "List of all Pokemonss");
         response.put("List: ", pokemonListDTO);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
     }
