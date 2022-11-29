@@ -19,9 +19,7 @@ public class PokedexController {
 
     @Autowired
     private PokemonServiceImpl pokemonService;
-
     private final PokemonMapper pokemonMapper;
-
     public PokedexController(PokemonMapper pokemonMapper) {
         this.pokemonMapper = pokemonMapper;
     }
@@ -130,7 +128,7 @@ public class PokedexController {
             response.put("Message", e.getMessage().concat(": ".concat(e.getLocalizedMessage())));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
-        response.put("message", "All pokemons listed");
+        response.put("message", "List of all Pokemons");
         response.put("List: ", pokemonListDTO);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
     }
