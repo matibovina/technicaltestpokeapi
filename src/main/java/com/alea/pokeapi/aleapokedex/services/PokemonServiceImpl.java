@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class PokemonServiceImpl implements PokemonService {
 
+    public static final String URL_POKEMON_ALL = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=5000";
     @Autowired
     private RestTemplate restTemplate;
 
@@ -28,11 +29,10 @@ public class PokemonServiceImpl implements PokemonService {
     @Override
     public List<PokemonDTO> saveAll() {
 
-        String url = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=5000";
         List<PokemonDTO> pokemonListDTO = new ArrayList<>();
 
         try {
-            PokemonRestResponseDTO response = restTemplate.getForEntity(url, PokemonRestResponseDTO.class).getBody();
+            PokemonRestResponseDTO response = restTemplate.getForEntity(URL_POKEMON_ALL, PokemonRestResponseDTO.class).getBody();
             pokemonListDTO = response.getResults().parallelStream().map(pokemonResultRestResponseDTO -> restTemplate.getForEntity(
                     pokemonResultRestResponseDTO.getUrl(), PokemonDTO.class).getBody()).collect(Collectors.toList());
 
