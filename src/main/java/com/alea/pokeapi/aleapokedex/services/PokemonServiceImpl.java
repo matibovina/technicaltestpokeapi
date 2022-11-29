@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PokemonServiceImpl implements PokemonService{
+public class PokemonServiceImpl implements PokemonService {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -24,15 +24,16 @@ public class PokemonServiceImpl implements PokemonService{
     @Autowired
     private PokemonRepository pokemonRepository;
 
-    private String url = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=5000";
+
 
     @Override
-    public List<PokemonDTO> findAll() {
+    public List<PokemonDTO> saveAll() {
 
+        String url = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=5000";
         List<PokemonDTO> pokemonListDTO = new ArrayList<>();
 
         try {
-            PokemonRestResponseDTO response  = restTemplate.getForEntity(url, PokemonRestResponseDTO.class).getBody();
+            PokemonRestResponseDTO response = restTemplate.getForEntity(url, PokemonRestResponseDTO.class).getBody();
             pokemonListDTO = response.getResults().parallelStream().map(pokemonResultRestResponseDTO -> restTemplate.getForEntity(
                     pokemonResultRestResponseDTO.getUrl(), PokemonDTO.class).getBody()).collect(Collectors.toList());
 
@@ -46,21 +47,26 @@ public class PokemonServiceImpl implements PokemonService{
 
     @Override
     public List<PokemonDTO> findHeaviest(Integer numResults) {
-        return pokemonMapper.asPokemonDTOList(pokemonRepository.findByWeigth(PageRequest.of(0, numResults)));
+        return pokemonMapper.asPokemonDTOList(pokemonRepository.findByOrderByWeightDesc(PageRequest.of(0, numResults)));
     }
 
     @Override
     public List<PokemonDTO> findHighest(Integer numResults) {
-        return pokemonMapper.asPokemonDTOList(pokemonRepository.findByHeight(PageRequest.of(0, numResults)));
+        return pokemonMapper.asPokemonDTOList(pokemonRepository.findByOrderByHeightDesc(PageRequest.of(0, numResults)));
     }
 
     @Override
     public List<PokemonDTO> findExperienced(Integer numResults) {
-        return pokemonMapper.asPokemonDTOList(pokemonRepository.findByBaseExperience(PageRequest.of(0, numResults)));
+        return pokemonMapper.asPokemonDTOList(pokemonRepository.findByOrderByBaseExperienceDesc(PageRequest.of(0, numResults)));
     }
 
     @Override
     public long countRows() {
-        return  pokemonRepository.count();
+        return pokemonRepository.count();
+    }
+
+    @Override
+    public List<PokemonDTO> findAll() {
+        return pokemonMapper.asPokemonDTOList(pokemonRepository.findAll());
     }
 }

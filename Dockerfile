@@ -6,7 +6,6 @@ COPY ./target/alea-pokedex-0.0.1-SNAPSHOT.jar /app
 
 EXPOSE 8001
 
-
 CMD mvn spring-boot:run
 
 ENTRYPOINT ["java", "-jar", "alea-pokedex-0.0.1-SNAPSHOT.jar"]

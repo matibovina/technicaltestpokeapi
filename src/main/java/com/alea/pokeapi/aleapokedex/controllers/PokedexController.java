@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
 @RestController
+@RequestMapping("/pokedex")
 public class PokedexController {
 
     @Autowired
@@ -24,12 +26,12 @@ public class PokedexController {
         this.pokemonMapper = pokemonMapper;
     }
 
-    @GetMapping(value = "/update-data-base/")
+    @GetMapping(value = "/update-data-base")
     public ResponseEntity<?> updateDataBase() {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<PokemonDTO> pokemonDTOList = pokemonService.findAll();
+            List<PokemonDTO> pokemonDTOList = pokemonService.saveAll();
 
         } catch (Exception e) {
             response.put("Message", e.getMessage().concat(": ".concat(e.getLocalizedMessage())));
@@ -39,76 +41,96 @@ public class PokedexController {
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/heaviest")
-    public ResponseEntity<?> showHeaviestsPokemons(@RequestParam(required = false) Integer num) {
+    @GetMapping(value = "/top-heaviest")
+    public ResponseEntity<?> showHeaviestsPokemons(@RequestParam(required = false) Integer numMaxResults) {
 
         Map<String, Object> response = new HashMap<>();
-        List<PokemonDTO> pokemonListDTO = new ArrayList<>();
+        List<PokemonDTO> pokemonListDTO;
 
 
         if (pokemonService.countRows() == 0) {
-            pokemonService.findAll();
+            pokemonService.saveAll();
         }
-        if (num == null) {
-            num = 5;
+        if (numMaxResults == null) {
+            numMaxResults = 5;
         }
         try {
-            pokemonListDTO = pokemonService.findHeaviest(num);
+            pokemonListDTO = pokemonService.findHeaviest(numMaxResults);
         } catch (Exception e) {
             response.put("Message", e.getMessage().concat(": ".concat(e.getLocalizedMessage())));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
-        response.put("message", "Here are the " + num + " heaviest");
+        response.put("message", "Here are the " + numMaxResults + " heaviest");
         response.put("List: ", pokemonListDTO);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 
     }
 
-    @GetMapping(value = "/highest")
-    public ResponseEntity<?> showHighestPokemons(@RequestParam(required = false) Integer num) {
+    @GetMapping(value = "/top-highest")
+    public ResponseEntity<?> showHighestPokemons(@RequestParam(required = false) Integer numMaxResults) {
 
 
         Map<String, Object> response = new HashMap<>();
-        List<PokemonDTO> pokemonListDTO = new ArrayList<>();
+        List<PokemonDTO> pokemonListDTO;
 
-        if (num == null) {
-            num = 5;
+        if (numMaxResults == null) {
+            numMaxResults = 5;
         }
         if (pokemonService.countRows() == 0) {
-            pokemonService.findAll();
+            pokemonService.saveAll();
         }
         try {
-            pokemonListDTO = pokemonService.findHighest(num);
+            pokemonListDTO = pokemonService.findHighest(numMaxResults);
         } catch (Exception e) {
             response.put("Message", e.getMessage().concat(": ".concat(e.getLocalizedMessage())));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
 
         response.put("List: ", pokemonListDTO);
-        response.put("message", "Here are the " + num + " highest");
+        response.put("message", "Here are the " + numMaxResults + " highest");
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/experienced")
-    public ResponseEntity<?> showExperiencedPokemons(@RequestParam(required = false) Integer num) {
+    @GetMapping(value = "/top-experienced")
+    public ResponseEntity<?> showExperiencedPokemons(@RequestParam(required = false) Integer numMaxResults) {
 
         Map<String, Object> response = new HashMap<>();
-        List<PokemonDTO> pokemonListDTO = new ArrayList<>();
+        List<PokemonDTO> pokemonListDTO;
 
-        if (num == null) {
-            num = 5;
+        if (numMaxResults == null) {
+            numMaxResults = 5;
         }
         if (pokemonService.countRows() == 0) {
-            pokemonService.findAll();
+            pokemonService.saveAll();
         }
         try {
-            pokemonListDTO = pokemonService.findExperienced(num);
+            pokemonListDTO = pokemonService.findExperienced(numMaxResults);
         } catch (Exception e) {
             response.put("Message", e.getMessage().concat(": ".concat(e.getLocalizedMessage())));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
 
-        response.put("message", "Here are the " + num + " most experienced");
+        response.put("message", "Here are the " + numMaxResults + " most experienced");
+        response.put("List: ", pokemonListDTO);
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/list-all-pokemons")
+    public ResponseEntity<?> findAll() {
+
+        Map<String, Object> response = new HashMap<>();
+        List<PokemonDTO> pokemonListDTO;
+
+        if (pokemonService.countRows() == 0) {
+            pokemonService.saveAll();
+        }
+        try {
+            pokemonListDTO = pokemonService.findAll();
+        } catch (Exception e) {
+            response.put("Message", e.getMessage().concat(": ".concat(e.getLocalizedMessage())));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+        }
+        response.put("message", "All pokemons listed");
         response.put("List: ", pokemonListDTO);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
     }

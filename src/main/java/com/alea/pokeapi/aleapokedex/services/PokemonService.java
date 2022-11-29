@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PokemonService {
 
-    public List<PokemonDTO> findAll();
+    public List<PokemonDTO> saveAll();
 
     public List<PokemonDTO> findHeaviest(Integer numResults);
 
@@ -15,5 +15,7 @@ public interface PokemonService {
     public List<PokemonDTO> findExperienced(Integer numResults);
 
     public long countRows();
+
+    public List<PokemonDTO> findAll();
 
 }
